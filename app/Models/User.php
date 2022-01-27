@@ -7,10 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    const UNVERIFIED_USER = '0';
+    const VERIFIED_USER = '1';
+
+    const REGULAR_USER = 1;
+    const ADMIN_USER = 0;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +28,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'verified',
+        'verification_token',
+        'admin',
     ];
 
     /**
@@ -31,6 +41,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'verification_token',
     ];
 
     /**
@@ -41,4 +52,27 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function isVerified() {
+        if($this->verified == User::UNVERIFIED_USER) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public function isAdmin() {
+        if($this->admin == User::REGULAR_USER) {
+            return false;
+        }
+
+        return true;
+    }
+
+    
+    public function generateVerificationCode() {
+        return Str::random(50);
+    }
 }
