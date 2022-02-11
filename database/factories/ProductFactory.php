@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Product;
 use App\Models\User;
@@ -23,7 +24,7 @@ class ProductFactory extends Factory
             "image" => $this->faker->randomNumber(['img_1', 'img_2', 'img_3']),
             "status" => $this->faker->randomNumber([Product::AVAILABLE_PRODUCT, Product::UNAVAILABLE_PRODUCT]),
             "seller_id" => User::all()->random()->id,
-            "buyer_id" => User::all()->random()->id,
+            "category_id" => Category::all()->random()->id,
 
         ];
     }

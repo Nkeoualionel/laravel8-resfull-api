@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\Buyers;
 
-class TranscationFactory extends Factory
+class TransactionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -24,8 +24,8 @@ class TranscationFactory extends Factory
         return [
             //
             "quantity" => $this->faker->randomNumber(1, 10),
-            "seller_id" => User::all()->random()->id,
-            "product" => Product::all()->random()->id,
+            "buyer_id" => $buyer->id,
+            "product_id" => $seller->products->random()->id,
 
         ];
     }
