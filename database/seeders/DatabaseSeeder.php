@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         Transaction::truncate();
         DB::table('category_product')->truncate();
 
-        User::factory()->count(100)->create();
+        User::factory()->count(1000)->create();
         Category::factory()->count(30)->create();
         Product::factory()->count(1000)->create()->each(
             function($product) {
