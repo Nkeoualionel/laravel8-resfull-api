@@ -2,12 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponser;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponser;
     /**
      * A list of the exception types that are not reported.
      *
@@ -28,6 +31,7 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
     /**
      * Register the exception handling callbacks for the application.
      *
@@ -37,7 +41,22 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (NotFoundHttpException $e) {
             //
-            return response()->json(['message' => 'Not Found'], 404);
+            return response()->json(['message' => 'Not Found', 'code' => '404'], 404);
         });
+
+    }
+
+
+    protected function unauthenticated($request, AuthenticationException $exception) {
+        return $this->error('User not authenticated', 401);
+    }
+
+
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request) {
+        if ($e->response) {
+                return $e->response;
+        }
+
+        return $request->expectsJson() ? $this->invalidJson($request, $e) : $this->invalid($request, $e);
     }
 }
