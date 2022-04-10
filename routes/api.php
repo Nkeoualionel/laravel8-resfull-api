@@ -32,7 +32,7 @@ Route::resource('/sellers', SellerController::class)->only(['index', 'show', 'ge
 /**
  * Categories
  */
-Route::resource('/catgories', CategoryController::class)->except(['create', 'edit']);
+Route::resource('/categories', CategoryController::class)->except(['create', 'edit']);
 
 /**
  * Transactions
